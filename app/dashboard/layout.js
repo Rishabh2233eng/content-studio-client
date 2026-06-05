@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Sparkles, History, LayoutDashboard, LogOut, Zap } from 'lucide-react';
+import { Sparkles, History, LayoutDashboard, LogOut, Zap, User } from 'lucide-react';
 
 export default function DashboardLayout({ children }) {
   const { user, logout, loading } = useAuth();
@@ -29,6 +29,7 @@ export default function DashboardLayout({ children }) {
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/dashboard/generate', icon: Sparkles, label: 'Generate' },
     { href: '/dashboard/history', icon: History, label: 'History' },
+    { href: '/dashboard/profile', icon: User, label: 'Profile' },
   ];
 
   const creditPct = Math.min((user.credits / 5) * 100, 100);
