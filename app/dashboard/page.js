@@ -1,17 +1,17 @@
 'use client';
 import { useAuth } from '../context/AuthContext';
 import Link from 'next/link';
-import { Sparkles, History, Zap, ArrowRight, FileText, Linkedin, Twitter, Youtube, Mail } from 'lucide-react';
+import { Sparkles, History, Zap, ArrowRight, FileText, Mail } from 'lucide-react';
 
 export default function Dashboard() {
   const { user } = useAuth();
 
   const formats = [
-    { icon: FileText, label: 'Blog Post', color: '#a78bfa' },
-    { icon: Linkedin, label: 'LinkedIn', color: '#60a5fa' },
-    { icon: Twitter, label: 'Twitter Thread', color: '#38bdf8' },
-    { icon: Youtube, label: 'YouTube Script', color: '#f87171' },
-    { icon: Mail, label: 'Email Newsletter', color: '#34d399' },
+    { label: 'Blog Post', color: '#a78bfa', emoji: '📝' },
+    { label: 'LinkedIn Post', color: '#60a5fa', emoji: '💼' },
+    { label: 'Twitter Thread', color: '#38bdf8', emoji: '🐦' },
+    { label: 'YouTube Script', color: '#f87171', emoji: '🎥' },
+    { label: 'Email Newsletter', color: '#34d399', emoji: '📧' },
   ];
 
   return (
@@ -34,7 +34,7 @@ export default function Dashboard() {
         ].map((stat, i) => (
           <div key={i} style={{ background: '#111111', border: '1px solid #1f1f1f', borderRadius: '14px', padding: '20px 22px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-              <span style={{ color: '#555', fontSize: '12px', textTransform: 'capitalize' }}>{stat.label}</span>
+              <span style={{ color: '#555', fontSize: '12px' }}>{stat.label}</span>
               {stat.icon}
             </div>
             <div style={{ color: '#ffffff', fontSize: '28px', fontWeight: '600', textTransform: 'capitalize' }}>{stat.value}</div>
@@ -43,26 +43,23 @@ export default function Dashboard() {
         ))}
       </div>
 
-      {/* What you generate */}
+      {/* Formats */}
       <div style={{ background: '#111111', border: '1px solid #1f1f1f', borderRadius: '14px', padding: '24px', marginBottom: '24px' }}>
         <h2 style={{ color: '#fff', fontSize: '15px', fontWeight: '600', marginBottom: '16px' }}>One topic → 5 formats instantly</h2>
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          {formats.map((f, i) => {
-            const Icon = f.icon;
-            return (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: '8px', padding: '8px 14px' }}>
-                <Icon size={15} color={f.color} />
-                <span style={{ color: '#aaa', fontSize: '13px' }}>{f.label}</span>
-              </div>
-            );
-          })}
+          {formats.map((f, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: '8px', padding: '8px 14px' }}>
+              <span style={{ fontSize: '15px' }}>{f.emoji}</span>
+              <span style={{ color: '#aaa', fontSize: '13px' }}>{f.label}</span>
+            </div>
+          ))}
         </div>
       </div>
 
       {/* Quick actions */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
         <Link href="/dashboard/generate" style={{ textDecoration: 'none' }}>
-          <div style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.25)', borderRadius: '14px', padding: '28px', cursor: 'pointer', transition: 'border-color 0.15s' }}
+          <div style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.25)', borderRadius: '14px', padding: '28px', cursor: 'pointer' }}
             onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.5)'}
             onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.25)'}>
             <Sparkles size={30} color="#a78bfa" style={{ marginBottom: '14px' }} />
@@ -75,7 +72,7 @@ export default function Dashboard() {
         </Link>
 
         <Link href="/dashboard/history" style={{ textDecoration: 'none' }}>
-          <div style={{ background: '#111111', border: '1px solid #1f1f1f', borderRadius: '14px', padding: '28px', cursor: 'pointer', transition: 'border-color 0.15s' }}
+          <div style={{ background: '#111111', border: '1px solid #1f1f1f', borderRadius: '14px', padding: '28px', cursor: 'pointer' }}
             onMouseEnter={e => e.currentTarget.style.borderColor = '#333'}
             onMouseLeave={e => e.currentTarget.style.borderColor = '#1f1f1f'}>
             <History size={30} color="#34d399" style={{ marginBottom: '14px' }} />
