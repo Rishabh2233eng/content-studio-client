@@ -13,6 +13,7 @@ export default function Generate() {
   const [result, setResult] = useState(null);
   const [copied, setCopied] = useState('');
   const [step, setStep] = useState('');
+  const [progress, setProgress] = useState(0);
   const [activeTab, setActiveTab] = useState('blogPost');
 
   const tones = [
@@ -40,6 +41,55 @@ export default function Generate() {
     '✅ Finalizing content...',
   ];
 
+  const pollJobStatus = async (jobId, contentId) => {
+    let stepIndex = 0;
+    setStep(steps[0]);
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await axios.get(
+          'http://localhost:5000/api/content/status/' + jobId + '?contentId=' + contentId,
+          { headers: { Authorization: 'Bearer ' + token } }
+        );
+
+        console.log('Poll response:', res.data);
+
+        const { status, progress: prog, content } = res.data;
+
+        setProgress(prog || 0);
+
+        if (stepIndex < steps.length - 1) {
+          stepIndex++;
+          setStep(steps[stepIndex]);
+        }
+
+        if (status === 'completed') {
+          clearInterval(interval);
+          setResult(content);
+          setActiveTab('blogPost');
+          setLoading(false);
+          setStep('✅ Done!');
+          await refreshUser();
+          toast.success('Content generated successfully! 🎉');
+        }
+
+        if (status === 'failed') {
+          clearInterval(interval);
+          setLoading(false);
+          setStep('');
+          toast.error('Generation failed. Please try again.');
+        }
+
+      } catch (err) {
+        console.error('Polling error:', err.message, err.response?.data);
+        clearInterval(interval);
+        setLoading(false);
+        setStep('');
+        toast.error(err.response?.data?.message || 'Polling failed: ' + err.message);
+      }
+    }, 3000);
+  };
+
   const handleGenerate = async () => {
     if (!topic.trim()) {
       toast.error('Please enter a topic first!');
@@ -52,15 +102,7 @@ export default function Generate() {
 
     setLoading(true);
     setResult(null);
-    setStep(steps[0]);
-
-    let stepIndex = 0;
-    const stepInterval = setInterval(() => {
-      stepIndex++;
-      if (stepIndex < steps.length) {
-        setStep(steps[stepIndex]);
-      }
-    }, 2500);
+    setProgress(0);
 
     try {
       const res = await axios.post(
@@ -68,19 +110,17 @@ export default function Generate() {
         { topic, tone },
         { headers: { Authorization: 'Bearer ' + token } }
       );
-      clearInterval(stepInterval);
-      setStep('✅ Done!');
-      setResult(res.data.content);
-      setActiveTab('blogPost');
-      await refreshUser();
-      toast.success('Content generated successfully! 🎉');
+
+      const { jobId, contentId } = res.data;
+      console.log('Job started:', jobId, contentId);
+      toast.success('Generation started! ⚡');
+      pollJobStatus(jobId, contentId);
+
     } catch (err) {
-      clearInterval(stepInterval);
-      const msg = err.response?.data?.message || 'Generation failed';
-      toast.error(msg);
-      setStep('');
-    } finally {
       setLoading(false);
+      setStep('');
+      const msg = err.response?.data?.message || 'Failed to start generation';
+      toast.error(msg);
     }
   };
 
@@ -99,7 +139,6 @@ export default function Generate() {
   return (
     <div style={{ maxWidth: '860px' }}>
 
-      {/* Header */}
       <div style={{ marginBottom: '32px' }}>
         <h1 style={{ color: '#fff', fontSize: '26px', fontWeight: '600', marginBottom: '8px' }}>
           Generate Content ✨
@@ -107,10 +146,8 @@ export default function Generate() {
         <p style={{ color: '#666', fontSize: '14px' }}>Enter a topic and get 5 content formats instantly with AI</p>
       </div>
 
-      {/* Input card */}
       <div style={{ background: '#111', border: '1px solid #1f1f1f', borderRadius: '14px', padding: '28px', marginBottom: '24px' }}>
 
-        {/* Credits warning */}
         {user?.credits <= 1 && (
           <div style={{ background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.2)', borderRadius: '10px', padding: '12px 16px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <Zap size={15} color="#fbbf24" />
@@ -120,11 +157,8 @@ export default function Generate() {
           </div>
         )}
 
-        {/* Topic */}
         <div style={{ marginBottom: '20px' }}>
-          <label style={{ color: '#888', fontSize: '13px', display: 'block', marginBottom: '8px' }}>
-            Topic or idea
-          </label>
+          <label style={{ color: '#888', fontSize: '13px', display: 'block', marginBottom: '8px' }}>Topic or idea</label>
           <textarea
             value={topic}
             onChange={e => setTopic(e.target.value)}
@@ -139,11 +173,8 @@ export default function Generate() {
           </div>
         </div>
 
-        {/* Tone */}
         <div style={{ marginBottom: '24px' }}>
-          <label style={{ color: '#888', fontSize: '13px', display: 'block', marginBottom: '10px' }}>
-            Tone
-          </label>
+          <label style={{ color: '#888', fontSize: '13px', display: 'block', marginBottom: '10px' }}>Tone</label>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {tones.map(t => (
               <button key={t.value} onClick={() => setTone(t.value)}
@@ -154,37 +185,34 @@ export default function Generate() {
           </div>
         </div>
 
-        {/* Progress */}
         {loading && (
           <div style={{ background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(124,58,237,0.2)', borderRadius: '10px', padding: '16px 20px', marginBottom: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
               <Loader size={16} color="#a78bfa" style={{ animation: 'spin 1s linear infinite', flexShrink: 0 }} />
               <span style={{ color: '#a78bfa', fontSize: '14px' }}>{step}</span>
             </div>
-            <div style={{ marginTop: '12px', background: '#2a2a2a', borderRadius: '99px', height: '3px' }}>
-              <div style={{ background: 'linear-gradient(90deg, #7c3aed, #ec4899)', height: '3px', borderRadius: '99px', width: '60%', animation: 'progress 15s linear forwards' }} />
+            <div style={{ background: '#2a2a2a', borderRadius: '99px', height: '4px' }}>
+              <div style={{ background: 'linear-gradient(90deg, #7c3aed, #ec4899)', height: '4px', borderRadius: '99px', width: progress + '%', transition: 'width 0.5s ease' }} />
             </div>
-            <p style={{ color: '#444', fontSize: '12px', marginTop: '8px' }}>
-              Generating all 5 formats simultaneously — usually takes 10-20 seconds
-            </p>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px' }}>
+              <p style={{ color: '#444', fontSize: '12px' }}>Processing in background queue...</p>
+              <p style={{ color: '#555', fontSize: '12px' }}>{progress}%</p>
+            </div>
           </div>
         )}
 
-        {/* Button */}
         <button onClick={handleGenerate}
           disabled={loading || !topic.trim() || user?.credits <= 0}
           style={{ display: 'flex', alignItems: 'center', gap: '8px', background: loading || !topic.trim() || user?.credits <= 0 ? '#2a1a4a' : '#7c3aed', color: loading || !topic.trim() ? '#666' : 'white', border: 'none', padding: '14px 28px', borderRadius: '10px', fontSize: '15px', fontWeight: '600', cursor: loading || !topic.trim() || user?.credits <= 0 ? 'not-allowed' : 'pointer', transition: 'all 0.15s' }}>
           {loading
-            ? <><Loader size={18} style={{ animation: 'spin 1s linear infinite' }} /> Generating...</>
+            ? <><Loader size={18} style={{ animation: 'spin 1s linear infinite' }} /> Processing in queue...</>
             : <><Sparkles size={18} /> Generate Content</>
           }
         </button>
       </div>
 
-      {/* Results */}
       {result && (
         <div>
-          {/* Success banner */}
           <div style={{ background: 'rgba(52,211,153,0.08)', border: '1px solid rgba(52,211,153,0.2)', borderRadius: '12px', padding: '14px 20px', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span style={{ fontSize: '18px' }}>🎉</span>
@@ -195,17 +223,15 @@ export default function Generate() {
             <span style={{ color: '#555', fontSize: '12px' }}>1 credit used</span>
           </div>
 
-          {/* Tabs */}
           <div style={{ display: 'flex', gap: '6px', marginBottom: '16px', flexWrap: 'wrap' }}>
             {formats.map(f => (
               <button key={f.key} onClick={() => setActiveTab(f.key)}
-                style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '9px 16px', borderRadius: '10px', border: activeTab === f.key ? `1px solid ${f.color}40` : '1px solid #1f1f1f', background: activeTab === f.key ? `${f.color}15` : '#111', color: activeTab === f.key ? f.color : '#555', fontSize: '13px', fontWeight: '500', cursor: 'pointer', transition: 'all 0.15s' }}>
+                style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '9px 16px', borderRadius: '10px', border: activeTab === f.key ? '1px solid ' + f.color + '40' : '1px solid #1f1f1f', background: activeTab === f.key ? f.color + '15' : '#111', color: activeTab === f.key ? f.color : '#555', fontSize: '13px', fontWeight: '500', cursor: 'pointer', transition: 'all 0.15s' }}>
                 <span>{f.emoji}</span> {f.label}
               </button>
             ))}
           </div>
 
-          {/* Content panel */}
           {activeContent && (
             <div style={{ background: '#111', border: '1px solid #1f1f1f', borderRadius: '14px', overflow: 'hidden' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid #1f1f1f' }}>
@@ -226,9 +252,8 @@ export default function Generate() {
             </div>
           )}
 
-          {/* Generate again */}
           <div style={{ marginTop: '20px', textAlign: 'center' }}>
-            <button onClick={() => { setResult(null); setTopic(''); setStep(''); }}
+            <button onClick={() => { setResult(null); setTopic(''); setStep(''); setProgress(0); }}
               style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#666', padding: '10px 24px', borderRadius: '8px', fontSize: '13px', cursor: 'pointer' }}>
               Generate something new
             </button>
@@ -238,7 +263,6 @@ export default function Generate() {
 
       <style>{`
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes progress { from { width: 0% } to { width: 95% } }
       `}</style>
     </div>
   );
