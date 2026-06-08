@@ -51,8 +51,18 @@ export function AuthProvider({ children }) {
     delete axios.defaults.headers.common['Authorization'];
   };
 
+  const refreshUser = async () => {
+    try {
+      const res = await axios.get(API_URL + '/auth/me');
+      setUser(res.data.user);
+      localStorage.setItem('user', JSON.stringify(res.data.user));
+    } catch (err) {
+      console.error('Failed to refresh user', err);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, token, loading, login, signup, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );
