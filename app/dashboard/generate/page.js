@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { Sparkles, Copy, Check, Loader, Zap } from 'lucide-react';
 import toast from 'react-hot-toast';
+import ReactMarkdown from 'react-markdown';
 
 export default function Generate() {
   const { user, token, refreshUser } = useAuth();
@@ -41,6 +42,20 @@ export default function Generate() {
     '✅ Finalizing content...',
   ];
 
+  const markdownComponents = {
+    h1: ({node, ...props}) => <h1 style={{ color: '#fff', fontSize: '20px', fontWeight: '600', marginBottom: '12px', marginTop: '8px' }} {...props} />,
+    h2: ({node, ...props}) => <h2 style={{ color: '#ddd', fontSize: '17px', fontWeight: '600', marginBottom: '10px', marginTop: '16px' }} {...props} />,
+    h3: ({node, ...props}) => <h3 style={{ color: '#ccc', fontSize: '15px', fontWeight: '600', marginBottom: '8px', marginTop: '14px' }} {...props} />,
+    p: ({node, ...props}) => <p style={{ color: '#aaa', fontSize: '14px', lineHeight: '1.8', marginBottom: '12px' }} {...props} />,
+    strong: ({node, ...props}) => <strong style={{ color: '#ddd', fontWeight: '600' }} {...props} />,
+    ul: ({node, ...props}) => <ul style={{ color: '#aaa', paddingLeft: '20px', marginBottom: '12px' }} {...props} />,
+    ol: ({node, ...props}) => <ol style={{ color: '#aaa', paddingLeft: '20px', marginBottom: '12px' }} {...props} />,
+    li: ({node, ...props}) => <li style={{ marginBottom: '6px', lineHeight: '1.7' }} {...props} />,
+    blockquote: ({node, ...props}) => <blockquote style={{ borderLeft: '3px solid #7c3aed', paddingLeft: '14px', color: '#888', fontStyle: 'italic', margin: '16px 0' }} {...props} />,
+    code: ({node, ...props}) => <code style={{ background: '#1a1a1a', color: '#a78bfa', padding: '2px 6px', borderRadius: '4px', fontSize: '13px' }} {...props} />,
+    hr: ({node, ...props}) => <hr style={{ border: 'none', borderTop: '1px solid #2a2a2a', margin: '16px 0' }} {...props} />,
+  };
+
   const pollJobStatus = async (jobId, contentId) => {
     let stepIndex = 0;
     setStep(steps[0]);
@@ -52,10 +67,7 @@ export default function Generate() {
           { headers: { Authorization: 'Bearer ' + token } }
         );
 
-        console.log('Poll response:', res.data);
-
         const { status, progress: prog, content } = res.data;
-
         setProgress(prog || 0);
 
         if (stepIndex < steps.length - 1) {
@@ -81,7 +93,6 @@ export default function Generate() {
         }
 
       } catch (err) {
-        console.error('Polling error:', err.message, err.response?.data);
         clearInterval(interval);
         setLoading(false);
         setStep('');
@@ -91,14 +102,8 @@ export default function Generate() {
   };
 
   const handleGenerate = async () => {
-    if (!topic.trim()) {
-      toast.error('Please enter a topic first!');
-      return;
-    }
-    if (user?.credits <= 0) {
-      toast.error('No credits remaining. Please upgrade your plan.');
-      return;
-    }
+    if (!topic.trim()) { toast.error('Please enter a topic first!'); return; }
+    if (user?.credits <= 0) { toast.error('No credits remaining. Please upgrade your plan.'); return; }
 
     setLoading(true);
     setResult(null);
@@ -110,17 +115,13 @@ export default function Generate() {
         { topic, tone },
         { headers: { Authorization: 'Bearer ' + token } }
       );
-
       const { jobId, contentId } = res.data;
-      console.log('Job started:', jobId, contentId);
       toast.success('Generation started! ⚡');
       pollJobStatus(jobId, contentId);
-
     } catch (err) {
       setLoading(false);
       setStep('');
-      const msg = err.response?.data?.message || 'Failed to start generation';
-      toast.error(msg);
+      toast.error(err.response?.data?.message || 'Failed to start generation');
     }
   };
 
@@ -132,22 +133,17 @@ export default function Generate() {
   };
 
   const wordCount = (text) => text?.trim().split(/\s+/).length || 0;
-
   const activeContent = result?.generatedContent?.[activeTab];
   const activeFormat = formats.find(f => f.key === activeTab);
 
   return (
     <div style={{ maxWidth: '860px' }}>
-
       <div style={{ marginBottom: '32px' }}>
-        <h1 style={{ color: '#fff', fontSize: '26px', fontWeight: '600', marginBottom: '8px' }}>
-          Generate Content ✨
-        </h1>
+        <h1 style={{ color: '#fff', fontSize: '26px', fontWeight: '600', marginBottom: '8px' }}>Generate Content ✨</h1>
         <p style={{ color: '#666', fontSize: '14px' }}>Enter a topic and get 5 content formats instantly with AI</p>
       </div>
 
       <div style={{ background: '#111', border: '1px solid #1f1f1f', borderRadius: '14px', padding: '28px', marginBottom: '24px' }}>
-
         {user?.credits <= 1 && (
           <div style={{ background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.2)', borderRadius: '10px', padding: '12px 16px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <Zap size={15} color="#fbbf24" />
@@ -168,9 +164,7 @@ export default function Generate() {
             onFocus={e => e.target.style.borderColor = '#7c3aed'}
             onBlur={e => e.target.style.borderColor = '#2a2a2a'}
           />
-          <div style={{ color: '#333', fontSize: '12px', marginTop: '6px', textAlign: 'right' }}>
-            {topic.length} characters
-          </div>
+          <div style={{ color: '#333', fontSize: '12px', marginTop: '6px', textAlign: 'right' }}>{topic.length} characters</div>
         </div>
 
         <div style={{ marginBottom: '24px' }}>
@@ -201,13 +195,9 @@ export default function Generate() {
           </div>
         )}
 
-        <button onClick={handleGenerate}
-          disabled={loading || !topic.trim() || user?.credits <= 0}
+        <button onClick={handleGenerate} disabled={loading || !topic.trim() || user?.credits <= 0}
           style={{ display: 'flex', alignItems: 'center', gap: '8px', background: loading || !topic.trim() || user?.credits <= 0 ? '#2a1a4a' : '#7c3aed', color: loading || !topic.trim() ? '#666' : 'white', border: 'none', padding: '14px 28px', borderRadius: '10px', fontSize: '15px', fontWeight: '600', cursor: loading || !topic.trim() || user?.credits <= 0 ? 'not-allowed' : 'pointer', transition: 'all 0.15s' }}>
-          {loading
-            ? <><Loader size={18} style={{ animation: 'spin 1s linear infinite' }} /> Processing in queue...</>
-            : <><Sparkles size={18} /> Generate Content</>
-          }
+          {loading ? <><Loader size={18} style={{ animation: 'spin 1s linear infinite' }} /> Processing...</> : <><Sparkles size={18} /> Generate Content</>}
         </button>
       </div>
 
@@ -216,9 +206,7 @@ export default function Generate() {
           <div style={{ background: 'rgba(52,211,153,0.08)', border: '1px solid rgba(52,211,153,0.2)', borderRadius: '12px', padding: '14px 20px', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span style={{ fontSize: '18px' }}>🎉</span>
-              <span style={{ color: '#34d399', fontSize: '14px', fontWeight: '500' }}>
-                5 formats generated for: <span style={{ color: '#6ee7b7' }}>"{result.topic}"</span>
-              </span>
+              <span style={{ color: '#34d399', fontSize: '14px', fontWeight: '500' }}>5 formats generated for: <span style={{ color: '#6ee7b7' }}>"{result.topic}"</span></span>
             </div>
             <span style={{ color: '#555', fontSize: '12px' }}>1 credit used</span>
           </div>
@@ -246,8 +234,8 @@ export default function Generate() {
                   {copied === activeTab ? 'Copied!' : 'Copy'}
                 </button>
               </div>
-              <div style={{ padding: '24px', color: '#bbb', fontSize: '14px', lineHeight: '1.9', whiteSpace: 'pre-wrap', maxHeight: '500px', overflowY: 'auto' }}>
-                {activeContent}
+              <div style={{ padding: '24px', fontSize: '14px', lineHeight: '1.9', maxHeight: '500px', overflowY: 'auto' }}>
+                <ReactMarkdown components={markdownComponents}>{activeContent}</ReactMarkdown>
               </div>
             </div>
           )}
@@ -261,9 +249,7 @@ export default function Generate() {
         </div>
       )}
 
-      <style>{`
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-      `}</style>
+      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }

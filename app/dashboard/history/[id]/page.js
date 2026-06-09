@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import Link from 'next/link';
 import { ArrowLeft, Copy, Check, Trash2 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
 export default function ContentView({ params }) {
   const { token } = useAuth();
@@ -21,6 +22,20 @@ export default function ContentView({ params }) {
     { key: 'youtubeScript', label: 'YouTube', emoji: '🎥', color: '#f87171' },
     { key: 'emailNewsletter', label: 'Email', emoji: '📧', color: '#34d399' },
   ];
+
+  const markdownComponents = {
+    h1: ({node, ...props}) => <h1 style={{ color: '#fff', fontSize: '20px', fontWeight: '600', marginBottom: '12px', marginTop: '8px' }} {...props} />,
+    h2: ({node, ...props}) => <h2 style={{ color: '#ddd', fontSize: '17px', fontWeight: '600', marginBottom: '10px', marginTop: '16px' }} {...props} />,
+    h3: ({node, ...props}) => <h3 style={{ color: '#ccc', fontSize: '15px', fontWeight: '600', marginBottom: '8px', marginTop: '14px' }} {...props} />,
+    p: ({node, ...props}) => <p style={{ color: '#aaa', fontSize: '14px', lineHeight: '1.8', marginBottom: '12px' }} {...props} />,
+    strong: ({node, ...props}) => <strong style={{ color: '#ddd', fontWeight: '600' }} {...props} />,
+    ul: ({node, ...props}) => <ul style={{ color: '#aaa', paddingLeft: '20px', marginBottom: '12px' }} {...props} />,
+    ol: ({node, ...props}) => <ol style={{ color: '#aaa', paddingLeft: '20px', marginBottom: '12px' }} {...props} />,
+    li: ({node, ...props}) => <li style={{ marginBottom: '6px', lineHeight: '1.7' }} {...props} />,
+    blockquote: ({node, ...props}) => <blockquote style={{ borderLeft: '3px solid #7c3aed', paddingLeft: '14px', color: '#888', fontStyle: 'italic', margin: '16px 0' }} {...props} />,
+    code: ({node, ...props}) => <code style={{ background: '#1a1a1a', color: '#a78bfa', padding: '2px 6px', borderRadius: '4px', fontSize: '13px' }} {...props} />,
+    hr: ({node, ...props}) => <hr style={{ border: 'none', borderTop: '1px solid #2a2a2a', margin: '16px 0' }} {...props} />,
+  };
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -72,56 +87,38 @@ export default function ContentView({ params }) {
 
   return (
     <div style={{ maxWidth: '860px' }}>
-
-      {/* Back button */}
-      <Link href="/dashboard/history" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#666', fontSize: '13px', textDecoration: 'none', marginBottom: '24px' }}
-        onMouseEnter={e => e.currentTarget.style.color = '#aaa'}
-        onMouseLeave={e => e.currentTarget.style.color = '#666'}>
+      <Link href="/dashboard/history" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#666', fontSize: '13px', textDecoration: 'none', marginBottom: '24px' }}>
         <ArrowLeft size={15} /> Back to History
       </Link>
 
-      {/* Header */}
       <div style={{ background: '#111', border: '1px solid #1f1f1f', borderRadius: '14px', padding: '24px 28px', marginBottom: '20px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
-            <h1 style={{ color: '#fff', fontSize: '20px', fontWeight: '600', marginBottom: '10px', lineHeight: '1.4' }}>
-              {content.topic}
-            </h1>
+            <h1 style={{ color: '#fff', fontSize: '20px', fontWeight: '600', marginBottom: '10px', lineHeight: '1.4' }}>{content.topic}</h1>
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <span style={{ background: 'rgba(124,58,237,0.15)', color: '#a78bfa', fontSize: '12px', padding: '4px 12px', borderRadius: '99px', border: '1px solid rgba(124,58,237,0.2)', textTransform: 'capitalize' }}>
-                {content.tone}
-              </span>
-              <span style={{ color: '#444', fontSize: '12px' }}>
-                {new Date(content.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
-              </span>
-              <span style={{ color: '#444', fontSize: '12px' }}>
-                1 credit used
-              </span>
+              <span style={{ background: 'rgba(124,58,237,0.15)', color: '#a78bfa', fontSize: '12px', padding: '4px 12px', borderRadius: '99px', border: '1px solid rgba(124,58,237,0.2)', textTransform: 'capitalize' }}>{content.tone}</span>
+              <span style={{ color: '#444', fontSize: '12px' }}>{new Date(content.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
             </div>
           </div>
-          <button onClick={handleDelete}
-            style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)', color: '#ef4444', padding: '8px 16px', borderRadius: '8px', fontSize: '13px', cursor: 'pointer' }}>
+          <button onClick={handleDelete} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)', color: '#ef4444', padding: '8px 16px', borderRadius: '8px', fontSize: '13px', cursor: 'pointer' }}>
             <Trash2 size={14} /> Delete
           </button>
         </div>
       </div>
 
-      {/* Format tabs */}
       <div style={{ display: 'flex', gap: '6px', marginBottom: '16px', flexWrap: 'wrap' }}>
         {formats.map(f => (
           <button key={f.key} onClick={() => setActiveTab(f.key)}
-            style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '9px 16px', borderRadius: '10px', border: activeTab === f.key ? `1px solid ${f.color}40` : '1px solid #1f1f1f', background: activeTab === f.key ? `${f.color}15` : '#111', color: activeTab === f.key ? f.color : '#555', fontSize: '13px', fontWeight: '500', cursor: 'pointer', transition: 'all 0.15s' }}>
-            <span>{f.emoji}</span>
-            {f.label}
+            style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '9px 16px', borderRadius: '10px', border: activeTab === f.key ? '1px solid ' + f.color + '40' : '1px solid #1f1f1f', background: activeTab === f.key ? f.color + '15' : '#111', color: activeTab === f.key ? f.color : '#555', fontSize: '13px', fontWeight: '500', cursor: 'pointer', transition: 'all 0.15s' }}>
+            <span>{f.emoji}</span> {f.label}
           </button>
         ))}
       </div>
 
-      {/* Content panel */}
       {activeContent && (
         <div style={{ background: '#111', border: '1px solid #1f1f1f', borderRadius: '14px', overflow: 'hidden' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid #1f1f1f' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span style={{ fontSize: '18px' }}>{activeFormat?.emoji}</span>
               <span style={{ color: activeFormat?.color, fontSize: '14px', fontWeight: '600' }}>{activeFormat?.label}</span>
             </div>
@@ -131,8 +128,8 @@ export default function ContentView({ params }) {
               {copied === activeTab ? 'Copied!' : 'Copy'}
             </button>
           </div>
-          <div style={{ padding: '24px', color: '#bbb', fontSize: '14px', lineHeight: '1.9', whiteSpace: 'pre-wrap', minHeight: '300px', maxHeight: '500px', overflowY: 'auto' }}>
-            {activeContent}
+          <div style={{ padding: '24px', fontSize: '14px', lineHeight: '1.9', minHeight: '300px', maxHeight: '500px', overflowY: 'auto' }}>
+            <ReactMarkdown components={markdownComponents}>{activeContent}</ReactMarkdown>
           </div>
         </div>
       )}
