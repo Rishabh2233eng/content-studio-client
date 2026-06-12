@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Sparkles } from 'lucide-react';
 
 export default function Signup() {
   const [name, setName] = useState('');
@@ -28,63 +27,51 @@ export default function Signup() {
     }
   };
 
-  const inputStyle = { width: '100%', background: '#1a1a1a', border: '1px solid #2a2a2a', color: '#fff', padding: '13px 16px', borderRadius: '10px', fontSize: '14px', outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.15s' };
+  const inputStyle = { width: '100%', background: '#FFFDF7', border: '1px solid #E8DFD0', color: '#2C1810', padding: '13px 16px', borderRadius: '10px', fontSize: '14px', outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.15s' };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0f0f0f', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: '#F5F0E8', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
       <div style={{ width: '100%', maxWidth: '420px' }}>
-
-        {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-          <div style={{ width: '44px', height: '44px', background: '#7c3aed', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-            <Sparkles size={22} color="white" />
-          </div>
-          <h1 style={{ color: '#fff', fontSize: '24px', fontWeight: '600', marginBottom: '6px' }}>Create your account</h1>
-          <p style={{ color: '#666', fontSize: '14px' }}>Start generating content with AI today</p>
+          <div style={{ width: '44px', height: '44px', background: '#C17B3B', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: '20px' }}>✦</div>
+          <h1 style={{ color: '#2C1810', fontSize: '24px', fontWeight: '700', marginBottom: '6px' }}>Create your account</h1>
+          <p style={{ color: '#8B7355', fontSize: '14px' }}>Start generating content with AI today</p>
         </div>
-
-        {/* Card */}
-        <div style={{ background: '#111111', border: '1px solid #1f1f1f', borderRadius: '16px', padding: '32px' }}>
+        <div style={{ background: '#FFFDF7', border: '1px solid #E8DFD0', borderRadius: '16px', padding: '32px' }}>
           {error && (
-            <div style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', color: '#f87171', padding: '12px 16px', borderRadius: '10px', marginBottom: '20px', fontSize: '13px' }}>
+            <div style={{ background: '#FEF2F0', border: '1px solid #FCCDC7', color: '#C0392B', padding: '12px 16px', borderRadius: '10px', marginBottom: '20px', fontSize: '13px' }}>
               {error}
             </div>
           )}
-
           <form onSubmit={handleSubmit}>
             <div style={{ marginBottom: '18px' }}>
-              <label style={{ color: '#888', fontSize: '13px', display: 'block', marginBottom: '8px' }}>Full name</label>
-              <input type="text" value={name} onChange={e => setName(e.target.value)}
-                placeholder="John Doe" required style={inputStyle}
-                onFocus={e => e.target.style.borderColor = '#7c3aed'}
-                onBlur={e => e.target.style.borderColor = '#2a2a2a'} />
+              <label style={{ color: '#8B7355', fontSize: '13px', display: 'block', marginBottom: '8px', fontWeight: '500' }}>Full name</label>
+              <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="John Doe" required style={inputStyle}
+                onFocus={e => e.target.style.borderColor = '#C17B3B'}
+                onBlur={e => e.target.style.borderColor = '#E8DFD0'} />
             </div>
             <div style={{ marginBottom: '18px' }}>
-              <label style={{ color: '#888', fontSize: '13px', display: 'block', marginBottom: '8px' }}>Email address</label>
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)}
-                placeholder="john@example.com" required style={inputStyle}
-                onFocus={e => e.target.style.borderColor = '#7c3aed'}
-                onBlur={e => e.target.style.borderColor = '#2a2a2a'} />
+              <label style={{ color: '#8B7355', fontSize: '13px', display: 'block', marginBottom: '8px', fontWeight: '500' }}>Email address</label>
+              <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="john@example.com" required style={inputStyle}
+                onFocus={e => e.target.style.borderColor = '#C17B3B'}
+                onBlur={e => e.target.style.borderColor = '#E8DFD0'} />
             </div>
             <div style={{ marginBottom: '24px' }}>
-              <label style={{ color: '#888', fontSize: '13px', display: 'block', marginBottom: '8px' }}>Password</label>
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)}
-                placeholder="••••••••" required minLength={6} style={inputStyle}
-                onFocus={e => e.target.style.borderColor = '#7c3aed'}
-                onBlur={e => e.target.style.borderColor = '#2a2a2a'} />
+              <label style={{ color: '#8B7355', fontSize: '13px', display: 'block', marginBottom: '8px', fontWeight: '500' }}>Password</label>
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required minLength={6} style={inputStyle}
+                onFocus={e => e.target.style.borderColor = '#C17B3B'}
+                onBlur={e => e.target.style.borderColor = '#E8DFD0'} />
             </div>
-            <button type="submit" disabled={loading} style={{ width: '100%', background: loading ? '#5b21b6' : '#7c3aed', color: 'white', border: 'none', padding: '14px', borderRadius: '10px', fontSize: '15px', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.15s' }}>
+            <button type="submit" disabled={loading} style={{ width: '100%', background: loading ? '#DBA876' : '#C17B3B', color: 'white', border: 'none', padding: '14px', borderRadius: '10px', fontSize: '15px', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.15s' }}>
               {loading ? 'Creating account...' : 'Create Account'}
             </button>
           </form>
-
-          <p style={{ textAlign: 'center', color: '#555', fontSize: '13px', marginTop: '20px' }}>
+          <p style={{ textAlign: 'center', color: '#8B7355', fontSize: '13px', marginTop: '20px' }}>
             Already have an account?{' '}
-            <Link href="/login" style={{ color: '#a78bfa', textDecoration: 'none', fontWeight: '500' }}>Sign in</Link>
+            <Link href="/login" style={{ color: '#C17B3B', textDecoration: 'none', fontWeight: '600' }}>Sign in</Link>
           </p>
         </div>
-
-        <p style={{ textAlign: 'center', color: '#444', fontSize: '12px', marginTop: '16px' }}>
+        <p style={{ textAlign: 'center', color: '#B5A088', fontSize: '12px', marginTop: '16px' }}>
           5 free credits included • No credit card required
         </p>
       </div>

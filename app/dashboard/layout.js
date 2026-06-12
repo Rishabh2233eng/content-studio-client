@@ -17,8 +17,8 @@ export default function DashboardLayout({ children }) {
 
   if (loading || !user) {
     return (
-      <div style={{ minHeight: '100vh', background: '#0f0f0f', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ color: '#a78bfa', fontSize: '16px' }}>Loading...</div>
+      <div style={{ minHeight: '100vh', background: '#F5F0E8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ color: '#C17B3B', fontSize: '16px' }}>Loading...</div>
       </div>
     );
   }
@@ -36,17 +36,17 @@ export default function DashboardLayout({ children }) {
   const creditPct = Math.min((user.credits / 5) * 100, 100);
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#0f0f0f', fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#F5F0E8', fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
 
       {/* Sidebar */}
-      <aside style={{ width: '240px', background: '#111111', borderRight: '1px solid #1f1f1f', display: 'flex', flexDirection: 'column', position: 'fixed', height: '100vh', top: 0, left: 0 }}>
+      <aside style={{ width: '240px', background: '#FFFDF7', borderRight: '1px solid #E8DFD0', display: 'flex', flexDirection: 'column', position: 'fixed', height: '100vh', top: 0, left: 0 }}>
 
         {/* Logo */}
-        <div style={{ padding: '24px 20px', borderBottom: '1px solid #1f1f1f', display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '36px', height: '36px', background: '#7c3aed', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <Sparkles size={18} color="white" />
+        <div style={{ padding: '24px 20px', borderBottom: '1px solid #E8DFD0', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ width: '36px', height: '36px', background: '#C17B3B', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '16px' }}>
+            ✦
           </div>
-          <span style={{ color: '#ffffff', fontWeight: '600', fontSize: '16px' }}>ContentStudio</span>
+          <span style={{ color: '#2C1810', fontWeight: '700', fontSize: '16px' }}>ContentStudio</span>
         </div>
 
         {/* Nav */}
@@ -59,10 +59,10 @@ export default function DashboardLayout({ children }) {
                 <div style={{
                   display: 'flex', alignItems: 'center', gap: '12px',
                   padding: '11px 14px', borderRadius: '10px', marginBottom: '4px',
-                  background: isActive ? 'rgba(124,58,237,0.15)' : 'transparent',
-                  border: isActive ? '1px solid rgba(124,58,237,0.3)' : '1px solid transparent',
-                  color: isActive ? '#a78bfa' : '#666666',
-                  fontSize: '14px', fontWeight: '500', cursor: 'pointer',
+                  background: isActive ? '#F0E6D3' : 'transparent',
+                  border: isActive ? '1px solid #DCC9A8' : '1px solid transparent',
+                  color: isActive ? '#C17B3B' : '#8B7355',
+                  fontSize: '14px', fontWeight: isActive ? '600' : '500', cursor: 'pointer',
                   transition: 'all 0.15s'
                 }}>
                   <Icon size={17} />
@@ -74,37 +74,37 @@ export default function DashboardLayout({ children }) {
         </nav>
 
         {/* Bottom */}
-        <div style={{ padding: '16px', borderTop: '1px solid #1f1f1f' }}>
+        <div style={{ padding: '16px', borderTop: '1px solid #E8DFD0' }}>
           {/* Credits */}
-          <div style={{ background: '#1a1a1a', borderRadius: '12px', padding: '14px', marginBottom: '12px' }}>
+          <div style={{ background: '#F5F0E8', borderRadius: '12px', padding: '14px', marginBottom: '12px', border: '1px solid #E8DFD0' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-              <span style={{ color: '#555', fontSize: '12px' }}>Credits remaining</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#fbbf24' }}>
+              <span style={{ color: '#8B7355', fontSize: '12px' }}>Credits remaining</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#C17B3B' }}>
                 <Zap size={13} />
                 <span style={{ fontSize: '13px', fontWeight: '600' }}>{user.credits}</span>
               </div>
             </div>
-            <div style={{ background: '#2a2a2a', borderRadius: '99px', height: '4px' }}>
-              <div style={{ background: '#7c3aed', height: '4px', borderRadius: '99px', width: `${creditPct}%`, transition: 'width 0.3s' }} />
+            <div style={{ background: '#E8DFD0', borderRadius: '99px', height: '4px' }}>
+              <div style={{ background: '#C17B3B', height: '4px', borderRadius: '99px', width: `${creditPct}%`, transition: 'width 0.3s' }} />
             </div>
-            <div style={{ color: '#444', fontSize: '11px', marginTop: '6px', textTransform: 'capitalize' }}>{user.plan} plan</div>
+            <div style={{ color: '#B5A088', fontSize: '11px', marginTop: '6px', textTransform: 'capitalize' }}>{user.plan} plan</div>
           </div>
 
           {/* User */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 6px', marginBottom: '4px' }}>
-            <div style={{ width: '32px', height: '32px', background: '#7c3aed', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '13px', fontWeight: '600', flexShrink: 0 }}>
+            <div style={{ width: '32px', height: '32px', background: '#C17B3B', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '13px', fontWeight: '600', flexShrink: 0 }}>
               {user.name?.charAt(0).toUpperCase()}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ color: '#dddddd', fontSize: '13px', fontWeight: '500', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.name}</div>
-              <div style={{ color: '#555', fontSize: '11px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.email}</div>
+              <div style={{ color: '#2C1810', fontSize: '13px', fontWeight: '600', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.name}</div>
+              <div style={{ color: '#B5A088', fontSize: '11px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.email}</div>
             </div>
           </div>
 
           {/* Logout */}
-          <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 14px', color: '#555', background: 'transparent', border: 'none', borderRadius: '10px', cursor: 'pointer', fontSize: '13px', width: '100%', transition: 'all 0.15s' }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#ef4444'; e.currentTarget.style.background = 'rgba(239,68,68,0.08)'; }}
-            onMouseLeave={e => { e.currentTarget.style.color = '#555'; e.currentTarget.style.background = 'transparent'; }}>
+          <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 14px', color: '#8B7355', background: 'transparent', border: 'none', borderRadius: '10px', cursor: 'pointer', fontSize: '13px', width: '100%', transition: 'all 0.15s' }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#C0392B'; e.currentTarget.style.background = '#FEF2F0'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = '#8B7355'; e.currentTarget.style.background = 'transparent'; }}>
             <LogOut size={15} />
             Logout
           </button>
