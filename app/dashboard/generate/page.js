@@ -6,6 +6,8 @@ import { Sparkles, Copy, Check, Loader, Zap } from 'lucide-react';
 import toast from 'react-hot-toast';
 import ReactMarkdown from 'react-markdown';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+
 export default function Generate() {
   const { user, token, refreshUser } = useAuth();
   const [topic, setTopic] = useState('');
@@ -63,7 +65,7 @@ export default function Generate() {
     const interval = setInterval(async () => {
       try {
         const res = await axios.get(
-          'http://localhost:5000/api/content/status/' + jobId + '?contentId=' + contentId,
+          API_URL + '/content/status/' + jobId + '?contentId=' + contentId,
           { headers: { Authorization: 'Bearer ' + token } }
         );
 
@@ -111,7 +113,7 @@ export default function Generate() {
 
     try {
       const res = await axios.post(
-        'http://localhost:5000/api/content/generate',
+        API_URL + '/content/generate',
         { topic, tone },
         { headers: { Authorization: 'Bearer ' + token } }
       );

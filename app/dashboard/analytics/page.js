@@ -8,6 +8,8 @@ import {
 } from 'recharts';
 import { Sparkles, Zap, FileText, TrendingUp } from 'lucide-react';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+
 export default function Analytics() {
   const { token } = useAuth();
   const [analytics, setAnalytics] = useState(null);
@@ -16,7 +18,7 @@ export default function Analytics() {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/analytics', {
+        const res = await axios.get(API_URL + '/analytics', {
           headers: { Authorization: 'Bearer ' + token }
         });
         setAnalytics(res.data.analytics);
@@ -77,7 +79,6 @@ export default function Analytics() {
         <p style={{ color: '#8B7355', fontSize: '14px' }}>Track your content generation activity</p>
       </div>
 
-      {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
         {stats.map((stat, i) => (
           <div key={i} style={{ background: '#FFFDF7', border: '1px solid #E8DFD0', borderRadius: '14px', padding: '20px' }}>
@@ -91,7 +92,6 @@ export default function Analytics() {
         ))}
       </div>
 
-      {/* Bar chart */}
       <div style={{ background: '#FFFDF7', border: '1px solid #E8DFD0', borderRadius: '14px', padding: '24px', marginBottom: '20px' }}>
         <h2 style={{ color: '#2C1810', fontSize: '15px', fontWeight: '600', marginBottom: '20px' }}>Generations — Last 7 Days</h2>
         <ResponsiveContainer width="100%" height={220}>
@@ -105,7 +105,6 @@ export default function Analytics() {
         </ResponsiveContainer>
       </div>
 
-      {/* Bottom row */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
         <div style={{ background: '#FFFDF7', border: '1px solid #E8DFD0', borderRadius: '14px', padding: '24px' }}>
           <h2 style={{ color: '#2C1810', fontSize: '15px', fontWeight: '600', marginBottom: '20px' }}>Tone Breakdown</h2>

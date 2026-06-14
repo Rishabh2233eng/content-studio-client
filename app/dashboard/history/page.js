@@ -5,6 +5,8 @@ import { useAuth } from '../../context/AuthContext';
 import { History, Trash2, Eye, Search } from 'lucide-react';
 import Link from 'next/link';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+
 export default function HistoryPage() {
   const { token } = useAuth();
   const [contents, setContents] = useState([]);
@@ -15,7 +17,7 @@ export default function HistoryPage() {
 
   const fetchHistory = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/content', {
+      const res = await axios.get(API_URL + '/content', {
         headers: { Authorization: 'Bearer ' + token }
       });
       setContents(res.data.contents);
@@ -28,7 +30,7 @@ export default function HistoryPage() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete('http://localhost:5000/api/content/' + id, {
+      await axios.delete(API_URL + '/content/' + id, {
         headers: { Authorization: 'Bearer ' + token }
       });
       setContents(contents.filter(c => c._id !== id));

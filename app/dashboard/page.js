@@ -5,6 +5,8 @@ import Link from 'next/link';
 import axios from 'axios';
 import { Sparkles, History, Zap, ArrowRight, TrendingUp, FileText, Clock } from 'lucide-react';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+
 export default function Dashboard() {
   const { user, token } = useAuth();
   const [recentContent, setRecentContent] = useState([]);
@@ -14,7 +16,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/analytics', {
+        const res = await axios.get(API_URL + '/analytics', {
           headers: { Authorization: 'Bearer ' + token }
         });
         setRecentContent(res.data.analytics.recentContent || []);
@@ -46,7 +48,6 @@ export default function Dashboard() {
   return (
     <div style={{ maxWidth: '920px' }}>
 
-      {/* Header */}
       <div style={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
           <h1 style={{ color: '#2C1810', fontSize: '26px', fontWeight: '700', marginBottom: '6px' }}>
@@ -59,7 +60,6 @@ export default function Dashboard() {
         </Link>
       </div>
 
-      {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '28px' }}>
         {[
           { label: 'Credits Left', value: user?.credits, sub: user?.plan + ' plan', icon: <Zap size={15} color="#C17B3B" /> },
@@ -78,10 +78,8 @@ export default function Dashboard() {
         ))}
       </div>
 
-      {/* Main content area */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
 
-        {/* Generate card */}
         <Link href="/dashboard/generate" style={{ textDecoration: 'none' }}>
           <div style={{ background: '#FDF6EE', border: '1px solid #DCC9A8', borderRadius: '14px', padding: '24px', cursor: 'pointer', height: '100%' }}>
             <div style={{ width: '40px', height: '40px', background: '#F0E6D3', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '14px' }}>
@@ -102,7 +100,6 @@ export default function Dashboard() {
           </div>
         </Link>
 
-        {/* Right column */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div style={{ background: '#FFFDF7', border: '1px solid #E8DFD0', borderRadius: '14px', padding: '20px' }}>
             <div style={{ marginBottom: '14px' }}>
@@ -156,7 +153,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Recent activity */}
       {recentContent.length > 0 && (
         <div style={{ background: '#FFFDF7', border: '1px solid #E8DFD0', borderRadius: '14px', padding: '22px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
