@@ -17,8 +17,8 @@ export default function DashboardLayout({ children }) {
 
   if (loading || !user) {
     return (
-      <div style={{ minHeight: '100vh', background: '#F5F0E8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ color: '#C17B3B', fontSize: '16px' }}>Loading...</div>
+      <div style={{ minHeight: '100vh', background: '#EDE8DF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ color: '#A0622A', fontSize: '16px', fontFamily: 'var(--font-display)' }}>Loading...</div>
       </div>
     );
   }
@@ -36,36 +36,25 @@ export default function DashboardLayout({ children }) {
   const creditPct = Math.min((user.credits / 5) * 100, 100);
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#F5F0E8', fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#EDE8DF', fontFamily: 'var(--font-body, sans-serif)' }}>
 
-      {/* Sidebar */}
-      <aside style={{ width: '240px', background: '#FFFDF7', borderRight: '1px solid #E8DFD0', display: 'flex', flexDirection: 'column', position: 'fixed', height: '100vh', top: 0, left: 0 }}>
+      <aside style={{ width: '240px', background: '#E0D8CC', borderRight: '1px solid #D4C9B8', display: 'flex', flexDirection: 'column', position: 'fixed', height: '100vh', top: 0, left: 0 }}>
 
-        {/* Logo */}
-        <div style={{ padding: '24px 20px', borderBottom: '1px solid #E8DFD0', display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '36px', height: '36px', background: '#C17B3B', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '16px' }}>
-            ✦
+        <div style={{ padding: '22px 20px', borderBottom: '1px solid #D4C9B8', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ width: '30px', height: '30px', background: '#1E0F08', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transform: 'rotate(-4deg)' }}>
+            <span style={{ fontSize: '13px', color: '#E8C89A' }}>✦</span>
           </div>
-          <span style={{ color: '#2C1810', fontWeight: '700', fontSize: '16px' }}>ContentStudio</span>
+          <span style={{ color: '#1E0F08', fontFamily: 'var(--font-display)', fontWeight: '700', fontSize: '16px' }}>ContentStudio</span>
         </div>
 
-        {/* Nav */}
-        <nav style={{ flex: 1, padding: '16px 12px' }}>
+        <nav style={{ flex: 1, padding: '14px 10px' }}>
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
             return (
               <Link key={item.href} href={item.href} style={{ textDecoration: 'none' }}>
-                <div style={{
-                  display: 'flex', alignItems: 'center', gap: '12px',
-                  padding: '11px 14px', borderRadius: '10px', marginBottom: '4px',
-                  background: isActive ? '#F0E6D3' : 'transparent',
-                  border: isActive ? '1px solid #DCC9A8' : '1px solid transparent',
-                  color: isActive ? '#C17B3B' : '#8B7355',
-                  fontSize: '14px', fontWeight: isActive ? '600' : '500', cursor: 'pointer',
-                  transition: 'all 0.15s'
-                }}>
-                  <Icon size={17} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '11px', padding: '10px 14px', borderRadius: '10px', marginBottom: '3px', background: isActive ? '#D4C4A8' : 'transparent', border: isActive ? '1px solid #C4AE8A' : '1px solid transparent', color: isActive ? '#1E0F08' : '#7A6555', fontSize: '14px', fontWeight: isActive ? '600' : '500', cursor: 'pointer', transition: 'all 0.15s' }}>
+                  <Icon size={16} />
                   {item.label}
                 </div>
               </Link>
@@ -73,45 +62,40 @@ export default function DashboardLayout({ children }) {
           })}
         </nav>
 
-        {/* Bottom */}
-        <div style={{ padding: '16px', borderTop: '1px solid #E8DFD0' }}>
-          {/* Credits */}
-          <div style={{ background: '#F5F0E8', borderRadius: '12px', padding: '14px', marginBottom: '12px', border: '1px solid #E8DFD0' }}>
+        <div style={{ padding: '14px', borderTop: '1px solid #D4C9B8' }}>
+          <div style={{ background: '#D8D0C4', borderRadius: '12px', padding: '14px', marginBottom: '12px', border: '1px solid #C8BBA8' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-              <span style={{ color: '#8B7355', fontSize: '12px' }}>Credits remaining</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#C17B3B' }}>
-                <Zap size={13} />
-                <span style={{ fontSize: '13px', fontWeight: '600' }}>{user.credits}</span>
+              <span style={{ color: '#7A6555', fontSize: '12px' }}>Credits remaining</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#A0622A' }}>
+                <Zap size={12} />
+                <span style={{ fontSize: '13px', fontWeight: '700' }}>{user.credits}</span>
               </div>
             </div>
-            <div style={{ background: '#E8DFD0', borderRadius: '99px', height: '4px' }}>
-              <div style={{ background: '#C17B3B', height: '4px', borderRadius: '99px', width: `${creditPct}%`, transition: 'width 0.3s' }} />
+            <div style={{ background: '#C8BBA8', borderRadius: '99px', height: '4px' }}>
+              <div style={{ background: '#A0622A', height: '4px', borderRadius: '99px', width: `${creditPct}%`, transition: 'width 0.3s' }} />
             </div>
-            <div style={{ color: '#B5A088', fontSize: '11px', marginTop: '6px', textTransform: 'capitalize' }}>{user.plan} plan</div>
+            <div style={{ color: '#9A8878', fontSize: '11px', marginTop: '6px', textTransform: 'capitalize' }}>{user.plan} plan</div>
           </div>
 
-          {/* User */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 6px', marginBottom: '4px' }}>
-            <div style={{ width: '32px', height: '32px', background: '#C17B3B', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '13px', fontWeight: '600', flexShrink: 0 }}>
+            <div style={{ width: '32px', height: '32px', background: '#1E0F08', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#E8C89A', fontSize: '13px', fontWeight: '700', flexShrink: 0 }}>
               {user.name?.charAt(0).toUpperCase()}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ color: '#2C1810', fontSize: '13px', fontWeight: '600', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.name}</div>
-              <div style={{ color: '#B5A088', fontSize: '11px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.email}</div>
+              <div style={{ color: '#1E0F08', fontSize: '13px', fontWeight: '600', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.name}</div>
+              <div style={{ color: '#9A8878', fontSize: '11px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.email}</div>
             </div>
           </div>
 
-          {/* Logout */}
-          <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 14px', color: '#8B7355', background: 'transparent', border: 'none', borderRadius: '10px', cursor: 'pointer', fontSize: '13px', width: '100%', transition: 'all 0.15s' }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#C0392B'; e.currentTarget.style.background = '#FEF2F0'; }}
-            onMouseLeave={e => { e.currentTarget.style.color = '#8B7355'; e.currentTarget.style.background = 'transparent'; }}>
-            <LogOut size={15} />
-            Logout
+          <button onClick={handleLogout}
+            style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 14px', color: '#7A6555', background: 'transparent', border: 'none', borderRadius: '10px', cursor: 'pointer', fontSize: '13px', width: '100%', transition: 'all 0.15s' }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#8B1A1A'; e.currentTarget.style.background = 'rgba(139,26,26,0.08)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = '#7A6555'; e.currentTarget.style.background = 'transparent'; }}>
+            <LogOut size={14} /> Logout
           </button>
         </div>
       </aside>
 
-      {/* Main content */}
       <main style={{ flex: 1, marginLeft: '240px', padding: '40px 48px', minHeight: '100vh' }}>
         {children}
       </main>

@@ -27,53 +27,54 @@ export default function Signup() {
     }
   };
 
-  const inputStyle = { width: '100%', background: '#FFFDF7', border: '1px solid #E8DFD0', color: '#2C1810', padding: '13px 16px', borderRadius: '10px', fontSize: '14px', outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.15s' };
+  const inputStyle = { width: '100%', background: '#E8E2D8', border: '1px solid #D4C9B8', color: '#1E0F08', padding: '13px 16px', borderRadius: '10px', fontSize: '14px', outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.15s' };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F5F0E8', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
-      <div style={{ width: '100%', maxWidth: '420px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-          <div style={{ width: '44px', height: '44px', background: '#C17B3B', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: '20px' }}>✦</div>
-          <h1 style={{ color: '#2C1810', fontSize: '24px', fontWeight: '700', marginBottom: '6px' }}>Create your account</h1>
-          <p style={{ color: '#8B7355', fontSize: '14px' }}>Start generating content with AI today</p>
+    <div style={{ minHeight: '100vh', background: '#EDE8DF', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: 'var(--font-body, sans-serif)' }}>
+      <div style={{ width: '100%', maxWidth: '400px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <div style={{ width: '40px', height: '40px', background: '#1E0F08', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px', transform: 'rotate(-4deg)' }}>
+            <span style={{ fontSize: '18px', color: '#E8C89A' }}>✦</span>
+          </div>
+          <h1 style={{ fontFamily: 'var(--font-display)', color: '#1E0F08', fontSize: '24px', fontWeight: '700', marginBottom: '6px' }}>Create account</h1>
+          <p style={{ color: '#7A6555', fontSize: '14px' }}>Start generating content with AI</p>
         </div>
-        <div style={{ background: '#FFFDF7', border: '1px solid #E8DFD0', borderRadius: '16px', padding: '32px' }}>
+        <div style={{ background: '#E8E2D8', border: '1px solid #D4C9B8', borderRadius: '18px', padding: '32px', boxShadow: '0 8px 32px rgba(30,15,8,0.08)' }}>
           {error && (
-            <div style={{ background: '#FEF2F0', border: '1px solid #FCCDC7', color: '#C0392B', padding: '12px 16px', borderRadius: '10px', marginBottom: '20px', fontSize: '13px' }}>
+            <div style={{ background: '#F5E8E8', border: '1px solid #D4AAAA', color: '#8B1A1A', padding: '12px 16px', borderRadius: '10px', marginBottom: '20px', fontSize: '13px' }}>
               {error}
             </div>
           )}
           <form onSubmit={handleSubmit}>
-            <div style={{ marginBottom: '18px' }}>
-              <label style={{ color: '#8B7355', fontSize: '13px', display: 'block', marginBottom: '8px', fontWeight: '500' }}>Full name</label>
+            <div style={{ marginBottom: '16px' }}>
+              <label style={{ color: '#7A6555', fontSize: '13px', display: 'block', marginBottom: '8px', fontWeight: '600' }}>Full name</label>
               <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="John Doe" required style={inputStyle}
-                onFocus={e => e.target.style.borderColor = '#C17B3B'}
-                onBlur={e => e.target.style.borderColor = '#E8DFD0'} />
+                onFocus={e => e.target.style.borderColor = '#A0622A'}
+                onBlur={e => e.target.style.borderColor = '#D4C9B8'} />
             </div>
-            <div style={{ marginBottom: '18px' }}>
-              <label style={{ color: '#8B7355', fontSize: '13px', display: 'block', marginBottom: '8px', fontWeight: '500' }}>Email address</label>
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="john@example.com" required style={inputStyle}
-                onFocus={e => e.target.style.borderColor = '#C17B3B'}
-                onBlur={e => e.target.style.borderColor = '#E8DFD0'} />
+            <div style={{ marginBottom: '16px' }}>
+              <label style={{ color: '#7A6555', fontSize: '13px', display: 'block', marginBottom: '8px', fontWeight: '600' }}>Email</label>
+              <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" required style={inputStyle}
+                onFocus={e => e.target.style.borderColor = '#A0622A'}
+                onBlur={e => e.target.style.borderColor = '#D4C9B8'} />
             </div>
             <div style={{ marginBottom: '24px' }}>
-              <label style={{ color: '#8B7355', fontSize: '13px', display: 'block', marginBottom: '8px', fontWeight: '500' }}>Password</label>
+              <label style={{ color: '#7A6555', fontSize: '13px', display: 'block', marginBottom: '8px', fontWeight: '600' }}>Password</label>
               <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required minLength={6} style={inputStyle}
-                onFocus={e => e.target.style.borderColor = '#C17B3B'}
-                onBlur={e => e.target.style.borderColor = '#E8DFD0'} />
+                onFocus={e => e.target.style.borderColor = '#A0622A'}
+                onBlur={e => e.target.style.borderColor = '#D4C9B8'} />
             </div>
-            <button type="submit" disabled={loading} style={{ width: '100%', background: loading ? '#DBA876' : '#C17B3B', color: 'white', border: 'none', padding: '14px', borderRadius: '10px', fontSize: '15px', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.15s' }}>
-              {loading ? 'Creating account...' : 'Create Account'}
+            <button type="submit" disabled={loading}
+              style={{ width: '100%', background: loading ? '#C4AE8A' : '#1E0F08', color: '#EDE8DF', border: 'none', padding: '14px', borderRadius: '10px', fontSize: '15px', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.15s', fontFamily: 'var(--font-body)' }}>
+              {loading ? 'Creating account...' : 'Create account'}
             </button>
           </form>
-          <p style={{ textAlign: 'center', color: '#8B7355', fontSize: '13px', marginTop: '20px' }}>
-            Already have an account?{' '}
-            <Link href="/login" style={{ color: '#C17B3B', textDecoration: 'none', fontWeight: '600' }}>Sign in</Link>
+          <p style={{ textAlign: 'center', color: '#7A6555', fontSize: '13px', marginTop: '20px' }}>
+            Already have one?{' '}
+            <Link href="/login" style={{ color: '#A0622A', textDecoration: 'none', fontWeight: '700' }}>Sign in</Link>
           </p>
         </div>
-        <p style={{ textAlign: 'center', color: '#B5A088', fontSize: '12px', marginTop: '16px' }}>
-          5 free credits included • No credit card required
-        </p>
+        <p style={{ textAlign: 'center', color: '#9A8878', fontSize: '12px', marginTop: '16px' }}>5 free credits included · no card required</p>
       </div>
     </div>
   );
