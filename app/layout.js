@@ -2,6 +2,7 @@ import { Fraunces, Inter } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from './context/AuthContext';
 import { Toaster } from 'react-hot-toast';
+import CookieBanner from './components/CookieBanner';
 
 const fraunces = Fraunces({ subsets: ['latin'], variable: '--font-display', weight: ['500','600','700'] });
 const inter = Inter({ subsets: ['latin'], variable: '--font-body' });
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
       <body className={fraunces.variable + ' ' + inter.variable} style={{ fontFamily: 'var(--font-body)' }}>
         <AuthProvider>
           {children}
+          <CookieBanner />
           <Toaster
             position="top-right"
             toastOptions={{
